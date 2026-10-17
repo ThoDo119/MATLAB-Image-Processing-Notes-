@@ -23,8 +23,6 @@
 * **Theory:** Images are stored as 2D/3D numerical arrays. Meta-data (EXIF) stores camera properties, timestamps, and spatial resolution.
 * **Key Takeaway:** The `imfinfo` function requires the file name passed as a `char` array (using single quotes `' '`) in standard MATLAB versions.
 
-<details>
-<summary><b>🔍 Click to expand Code & Output</b></summary>
   
 ```
 % Read and display image
