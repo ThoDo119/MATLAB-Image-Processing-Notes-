@@ -1,52 +1,37 @@
-# 📚 MATLAB Image Processing Notes & Learning Log
+# MATLAB Image Processing Notes & Learning Log
 
 > **Author:** Đỗ Đức Thọ  
 > **Repository:** Continuous learning log, core theories, MATLAB code snippets, and output visualizations for Image Processing.
 
----
-## 📌 Table of Contents
-1. [Basic Image Reading & Meta-data Extraction](#1-basic-image-reading--meta-data-extraction)
-   * [1.1 Reading & Displaying Images](#11-reading--displaying-images)
-   * [1.2 Extracting Image Metadata (imfinfo)](#12-extracting-image-metadata-imfinfo)
-   * [1.3 Accessing Specific Struct Fields (Dot Notation)](#13-accessing-specific-struct-fields-dot-notation)
-   * [1.4 Converting EXIF Timestamp to datetime Object](#14-converting-exif-timestamp-to-datetime-object)
-   * [1.5 Displaying Non-uint8 Images (16-Bit Medical Data)](#15-displaying-non-uint8-images-16-bit-medical-data)
-   * [1.6 Inspecting Pixel Intensity Range (min/max)](#16-inspecting-pixel-intensity-range-minmax)
-   * [1.7 Inspecting Data Types (whos)](#17-inspecting-data-types-whos)
-2. [Image Arithmetic, Type Conversion, and Frame Averaging](#2-image-arithmetic-type-conversion-and-frame-averaging)
-   * [2.1 Naive Frame Averaging & Integer Overflow](#21-naive-frame-averaging--integer-overflow)
-   * [2.2 Correct Averaging via Floating-Point Conversion (im2double)](#22-correct-averaging-via-floating-point-conversion-im2double)
 
----
 
-### 1. Basic Image Reading & Meta-data Extraction
-* **Theory:** Images are stored as 2D/3D numerical arrays. Meta-data (EXIF) stores camera properties, timestamps, and spatial resolution.
-* **Key Takeaway:** The `imfinfo` function requires the file name passed as a `char` array (using single quotes `' '`) in standard MATLAB versions.
+### 1. Read the images in folder and display
 
-  
 ```
 % Read and display image
-img = imread('boston night.jpg');
-imshow(img); 
+img = imread("hagiang.jpg")
+imshow(img) 
 ```
-<img width="1017" height="672" alt="{87246564-F8B7-4F0C-97A5-07266518946A}" src="https://github.com/user-attachments/assets/c302ed59-4614-42ca-b62a-e6bf9a9d98f0" />
+<img width="1063" height="802" alt="{FFB4E3AA-FAA5-43AC-9431-E8112C4DB4D4}" src="https://github.com/user-attachments/assets/31150b1a-17e7-473d-a084-e8a23aec464e" />
 
+### 2. Read Meta-Data using the `imfinfo` function 
+Meta-Data is all of imformation of an image
+Differential with imshow demonstrate the size and intensity, Meta-Data show timestamp, device setting, bytes, type of image (PNG, JPG, ...)
 ```
-% Read Meta-Data using the imfinfo function
-% Differential with imshow demonstrate the size and intensity, Meta-Data show timestamp, device setting, bytes, type of image (PNG, JPG, ...)
-img = imread('boston night.jpg');
-metadata = imfinfo('boston night.jpg')
+img = imread("hagiang.jpg");
+metadata = imfinfo("hagiang.jpg")
 ```
-<img width="1281" height="785" alt="{99F5AA36-BEC1-4C88-BE7D-D273B6DF8F50}" src="https://github.com/user-attachments/assets/7b73af43-2a01-4936-982f-ab6ec6f5f717" />
+<img width="885" height="441" alt="{A25CE876-4BE1-47FB-B567-EE1F86EC7B07}" src="https://github.com/user-attachments/assets/b05f9043-a2d3-4094-b8f0-cea22dbd6790" />
 
+### 3. We use the dot nation (.) to extract only the specific information required for our algorithm or analysis
+For example the FileModDate 
 ```
-% We use the dot notation (.) to extract only the specific information required for our algorithm or analysis
-img = imread('boston night.jpg');
-imgDate = metadata.DateTime
-cameraInfo = metadata.DigitalCamera
+img = imread("hagiang.jpg");
+metadata = imfinfo("hagiang.jpg");
+imgDate = metadata.FileModDate
 ```
-<img width="756" height="91" alt="{DE0C2667-F539-4931-A909-EFD129A4E18D}" src="https://github.com/user-attachments/assets/33019392-3db8-4d6c-adde-a7d3c22f6b55" />
-<img width="1048" height="711" alt="{6BC11520-FEBC-4EA4-B31C-0850BC58D942}" src="https://github.com/user-attachments/assets/c14733ba-9d38-437c-9d52-8bca11181ccc" />
+<img width="1332" height="122" alt="{4D38D0FA-7899-4952-AAA5-452CEAB089CE}" src="https://github.com/user-attachments/assets/3563c965-6793-4da4-b00c-40461afad04e" />
+
 
 ```
 %  metadata.DateTime vs. datetime():
