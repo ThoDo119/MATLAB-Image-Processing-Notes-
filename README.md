@@ -97,44 +97,9 @@ maxPixel = max(brainMRI(:))
 ```
 <img width="793" height="294" alt="{3835D7AC-FAF3-46B7-961E-73A88DC636DE}" src="https://github.com/user-attachments/assets/bb4c8b0b-2b44-478d-826c-b2ac5890d5c6" />
 
-### 6. To know the class of image
+### 7. To know the class of image
 ```
 % To know the class of image
 whos brainMRI
 ```
 <img width="757" height="101" alt="{F60A5C58-B8B4-4A26-870B-F79ED37CDB6A}" src="https://github.com/user-attachments/assets/b0b424e2-c68d-40c7-accd-da2f29ba8946" />
-
-## 2. Image Arithmetic, Type Conversion, and Geometric Transformations
-```
-% --- 1. Load sequence of Orion Nebula images ---
-img1 = imread("OrionNebula1.png");
-img2 = imread("OrionNebula2.png");
-img3 = imread("OrionNebula3.png");
-img4 = imread("OrionNebula4.png");
-img5 = imread("OrionNebula5.png");
-
-% --- 2. Incorrect Naive Averaging (Demonstrating uint8 Overflow) ---
-% Direct addition saturates pixels > 255 to 255 first.
-% Dividing by 5 maps max intensities down to ~51 (dim/dark output).
-imgSumNaive = img1 + img2 + img3 + img4 + img5;
-imgAvgNaive = imgSumNaive / 5;
-
-% Display dark, saturated output
-imshow(imgAvgNaive);
-title('Naive Averaging (Integer Saturation / Dark Output)');
-```
-<img width="1408" height="904" alt="{9FFD5F92-13F7-4BAC-BE7B-F3E5A1D5E2FB}" src="https://github.com/user-attachments/assets/bb839c49-977a-4887-be28-050b78a7d3c2" />
-
-```
-% Correct Averaging using im2double ---
-% Convert images to double-precision floating-point matrices before addition.
-% Pixel accumulation is unlimited during addition, preventing integer clipping.
-avgI = (im2double(img1) + im2double(img2) + im2double(img3) + im2double(img4) + im2double(img5)) / 5;
-
-% Display normalized average output
-imshow(avgI);
-title('Correct Averaging using im2double (Preserved Intensity & Noise Reduction)');
-```
-<img width="1384" height="850" alt="{50E972E4-89BA-4BB5-810F-AF86625D9F36}" src="https://github.com/user-attachments/assets/a4e238d7-0d6f-4af6-a45b-f433e2ca177f" />
-
-
