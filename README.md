@@ -32,31 +32,33 @@ imgDate = metadata.FileModDate
 ```
 <img width="1332" height="122" alt="{4D38D0FA-7899-4952-AAA5-452CEAB089CE}" src="https://github.com/user-attachments/assets/3563c965-6793-4da4-b00c-40461afad04e" />
 
+### 4. Differentiation between `metadata.DateTime` (or `metadata.FileModDate`) vs. `datetime()`
+1. **`metadata.DateTime` / `metadata.FileModDate` (Metadata Fields):**
+   * These are specific field names inside the `metadata` struct returned by `imfinfo()`[cite: 4].
+   * **`DateTime`**: An optional field defined by EXIF standards representing when the photo was originally captured[cite: 3].
+   * **`FileModDate`**: A standard system field representing the file's last modification timestamp on the disk[cite: 4].
+   * Both hold raw text data (stored as a `char` array or `string`)[cite: 4].
 
+2. **`datetime()` (MATLAB Data Type / Function):**
+   * A built-in MATLAB function/constructor used to parse raw string representations into a native `datetime` data type.
+   * Converting text into a `datetime` object enables time-series operations, such as calculating duration between timestamps, sorting by time, or filtering by dates.
+
+3. **Role of `InputFormat`:**
+   * Acts as a format specification template that informs MATLAB how to parse the incoming text string correctly:
+     * EXIF `DateTime` format: `'yyyy:MM:dd HH:mm:ss'`
+     * System `FileModDate` format: `'dd-MMM-yyyy HH:mm:ss'`[cite: 4]
+   * The pattern, delimiters, and spacing in `InputFormat` must strictly match the structure of the source string.
 ```
-%  metadata.DateTime vs. datetime():
-%    - 'DateTime' (capital D & T) is a specific field name inside the struct,
-%      defined by EXIF standards. MATLAB is case-sensitive.
-%    - 'datetime()' (lowercase) is MATLAB's built-in function used to convert 
-%      raw text into a functional, readable datetime object.
-%
-%  Why convert to a 'datetime' object?
-%    Raw 'metadata.DateTime' is just a plain character array ('char'). Converting 
-%    it into a 'datetime' object allows for time-series calculations (e.g., 
-%    subtracting timestamps between two frames to measure intervals or speed).
-%
-% Purpose of 'InputFormat':
-%    Acts as a parsing template ('yyyy:MM:dd HH:mm:ss') telling MATLAB how to 
-%    interpret the raw text string correctly (Year, Month, Day, Hour, Minute, Second).
-%    Note: Spacing in 'InputFormat' must match the raw string exactly.
+img = imread('hagiang.jpg');
+metadata = imfinfo('hagiang.jpg');
+imgDate = metadata.FileModDate;
 
-img = imread('boston night.jpg');
-metadata = imfinfo('boston night.jpg')
-imgDate = metadata.DateTime
-imgDate2 = datetime(imgDate, 'InputFormat', 'yyyy:MM:dd HH:mm:ss')
+% Sửa InputFormat thành 'dd-MMM-yyyy HH:mm:ss'
+imgDate2 = datetime(imgDate, 'InputFormat', 'dd-MMM-yyyy HH:mm:ss')
 ```
-<img width="435" height="271" alt="{EC38B5E4-19CD-4B71-BDF0-662DF088C4D3}" src="https://github.com/user-attachments/assets/54edb9fa-9157-4cca-96bf-e75adb1a442e" />
+<img width="291" height="136" alt="{0046F9F3-4023-4761-BECD-BB3CBA747A9C}" src="https://github.com/user-attachments/assets/2a402092-eb34-4d4e-a453-ed3d9dd04b39" />
 
+### 5. Visualizing High Dynamic Range Images (16-bit uint16 Data)
 ```
 
 % 1. Load sample 16-bit medical dataset
@@ -87,13 +89,15 @@ title('Manual Display Range');
 ```
 <img width="1557" height="488" alt="{98203E80-F6E3-41AC-8BC5-B9EE3B7DE1E5}" src="https://github.com/user-attachments/assets/de379d27-a73e-4539-9c0e-98ec9c81ccbf" />
 
+
+### 6. Find the minimum and maximum pixel values ​​in the entire MRI image
 ```
-% Find the minimum and maximum pixel values ​​in the entire MRI image
 minPixel = min(brainMRI(:))
 maxPixel = max(brainMRI(:))
 ```
 <img width="793" height="294" alt="{3835D7AC-FAF3-46B7-961E-73A88DC636DE}" src="https://github.com/user-attachments/assets/bb4c8b0b-2b44-478d-826c-b2ac5890d5c6" />
 
+### 6. To know the class of image
 ```
 % To know the class of image
 whos brainMRI
