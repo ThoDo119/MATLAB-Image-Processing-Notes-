@@ -103,3 +103,63 @@ maxPixel = max(brainMRI(:))
 whos brainMRI
 ```
 <img width="757" height="101" alt="{F60A5C58-B8B4-4A26-870B-F79ED37CDB6A}" src="https://github.com/user-attachments/assets/b0b424e2-c68d-40c7-accd-da2f29ba8946" />
+
+### 8. Image Averaging (Multi-frame Noise Reduction)
+Image Averaging is a spatial domain enhancement technique used to reduce random camera sensor noise in static scenes. By taking multiple photos of the same stationary scene and calculating the mean intensity for each pixel across all frames, the random noise naturally cancels itself out while the actual structural details remain constant. This process significantly improves the Signal-to-Noise Ratio (SNR), resulting in a cleaner, sharper, and higher-quality image.
+
+1. First case `uint8` Summing raw pixel values directly causes integer overflow saturation. When the cumulative pixel value exceeds 255, it gets capped at 255 before the division takes place, leading to severely blown-out white areas (clipping artifacts).
+<img width="1480" height="372" alt="{F38C6959-5349-4DF5-81A8-5E396BC59753}" src="https://github.com/user-attachments/assets/8eb28744-a269-47bc-b8b3-8801eba7e6c8" />
+
+```
+img1 = imread("table1.jpg");
+img2 = imread("table2.jpg");
+img3 = imread("table3.jpg");
+img4 = imread("table4.jpg");
+img5 = imread("table5.jpg");
+avgim = (img1 + img2 + img3 + img4 + img5)/5;
+imshow(avgim)
+title("Average Image")
+```
+<img width="1003" height="754" alt="{D9CA9FD9-933A-4B33-9667-6EF7F8A82383}" src="https://github.com/user-attachments/assets/1372118b-165c-4e76-9a88-5fc4550a3fbc" />
+
+2. Converting images to floating-point representation scales pixel values to a range between 0 and 1. This prevents value capping during addition, ensuring accurate floating-point average calculation across all image
+```
+img1 = imread("table1.jpg");
+img2 = imread("table2.jpg");
+img3 = imread("table3.jpg");
+img4 = imread("table4.jpg");
+img5 = imread("table5.jpg");
+avgim = (im2double(img1) + im2double(img2) + im2double(img3) + im2double(img4) + im2double(img5))/5;
+imshow(avgim)
+title("Average Image")
+```
+<img width="932" height="740" alt="{64E838DE-086B-4AA1-8C62-368DED1BA04F}" src="https://github.com/user-attachments/assets/1ff2b992-caae-4361-9d96-4addc6612339" />
+
+3. Compare 2 immage before and after by using `montage` function. *note: you need to install `Image Processing Toolbox` on Add-On in MATLAB
+```
+img1 = imread("table1.jpg");
+img2 = imread("table2.jpg");
+img3 = imread("table3.jpg");
+img4 = imread("table4.jpg");
+img5 = imread("table5.jpg");
+avgim = (im2double(img1) + im2double(img2) + im2double(img3) + im2double(img4) + im2double(img5))/5;
+
+montage({img1, avgim})
+title("some unfocus here because my hand unstable but the image show the true color and reduce noise")
+```
+<img width="928" height="391" alt="{FE9FCD9F-2795-4D33-8F49-0CAC2FE26344}" src="https://github.com/user-attachments/assets/24e150e0-43e9-4b9f-81e3-22b9bdbdb43e" />
+
+### 8. Data Type Conversion & Grayscale Processing
+Through the previous exercise, we learned how to perform conversions between fundamental data types (such as uint8 and double). In image processing, data type conversion is a standard workflow applied to images to enable precise mathematical operations and prevent computational issues like integer overflow.
+To further optimize processing pipelines, images can also be converted to grayscale when color information is not required for the task.
+```
+img1 = imread("table1.jpg");
+img1gray = im2gray(img1);
+imshow(img1gray)
+```
+<img width="391" height="96" alt="{9DCA6391-2F92-4988-9D1F-00737F0CDACB}" src="https://github.com/user-attachments/assets/e490474b-3388-4363-9e48-23063e2e6497" />
+<img width="984" height="695" alt="{80FD448A-6B3B-4B32-AF0C-E44E98264710}" src="https://github.com/user-attachments/assets/68b20961-af9f-4597-8731-6ee30f3e325f" />
+
+
+
+
